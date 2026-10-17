@@ -5,6 +5,36 @@
 
 An [Etebase](https://www.etebase.com) (EteSync 2.0) server so you can run your own.
 
+## About this fork
+
+This is an unofficial fork of [etesync/server](https://github.com/etesync/server), not affiliated
+with the EteSync project. Upstream has had no commits since July 2024 and still requires Django 4.2,
+which reached end of life in April 2026 and no longer gets security fixes.
+
+Changes (branch `django-5.2`), on top of upstream `master` (v0.14.2 plus one later fix):
+
+- Django upgraded from 4.2 to **5.2 LTS** (supported until April 2028): the version range in
+  `requirements.in/base.txt` and the pin in `requirements.txt` (5.2.18). No other dependency
+  changed: the pinned `asgiref` and `sqlparse` already satisfy Django 5.2.
+- Removed the `USE_L10N` setting from `etebase_server/settings.py` (Django 5.0 removed it).
+
+Because of Django 5.2, **Python 3.10 or newer** is required (tested with 3.12), not 3.7 as the
+upstream instructions below say. Everything else in this README still applies.
+
+Tested on Python 3.12 with SQLite:
+
+- `manage.py check`, `migrate` on a fresh database and `collectstatic`, with no deprecation
+  warnings from Django; `makemigrations --check` finds no model changes.
+- The official [`etebase`](https://pypi.org/project/etebase/) Python client (0.31.5) against the
+  running server: signup of an admin-created user (and refusal while signup is blocked), login from
+  a second session, calendar and address-book collections, items including a 3 MiB one read back
+  byte for byte, incremental sync with stokens, revision history, conflict rejection, deletion,
+  invitations endpoint, password change, logout.
+- The admin pages, including creating a user with the add-user form.
+- In use with the official EteSync apps, syncing between several devices.
+
+The fork carries the upstream license (AGPL-3.0).
+
 [![Chat with us](https://img.shields.io/badge/chat-IRC%20|%20Matrix%20|%20Web-blue.svg)](https://www.etebase.com/community-chat/)
 
 # Installation
